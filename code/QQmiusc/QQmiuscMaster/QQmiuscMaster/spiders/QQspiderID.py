@@ -68,6 +68,7 @@ class QQmusicSpider(Spider):
                         for sh in shortTime():
                             yield Request(url=parse_link.format(time=sh, id=top_id[0], type="top"), callback=self.MusicInfos, meta={'top_id': top_id[0]})
             elif jsonpath(on_data, "$..GroupID")[0] == 1:
+                print('1')
                 for ch in on_data["List"]:
                     top_id = jsonpath(ch, "$..topID")
                     upTime = jsonpath(ch, "$..update_key")

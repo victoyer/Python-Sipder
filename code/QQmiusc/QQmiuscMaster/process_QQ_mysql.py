@@ -37,7 +37,7 @@ def main():
             # 获取MySQL操作游标
             cur = mysql_client.cursor()
             # 定义插入的sql语句
-            sql = "insert into SongInfo(songid, songname, songorig, topID) values (%s, %s, %s, %s)"
+            sql = "insert  into SongInfo(songid, songname, songorig, topID) values (%s, %s, %s, %s)"
             # 插入数据库数据
             params = [
                 item['songid'],
@@ -55,6 +55,7 @@ def main():
             print('插入数据{data}成功'.format(data=item))
 
         except Exception as e:
+            mysql_client.rollback()
             print(e)
 
 

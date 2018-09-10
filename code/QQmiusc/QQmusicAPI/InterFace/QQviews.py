@@ -48,11 +48,11 @@ class QQdb(Base):
 
 @dataAPI.route('/<string:top_id>/<string:num>', methods=['GET'])
 def data(top_id, num):
-    if top_id in ['4', '26', '27', '54', '55', '56', '28', '5', '6', '3', '16', '29', '17', '201', '52', '36', '108',
+    if top_id in ['4', '26', '27', '54', '55', '56', '28', '5', '6', '3', '16', '29', '17', '52', '36', '108',
                   '123', '106', '107', '105', '113', '114']:
         top_all_datas = []
         if num == '0':
-            top_all_datas = db_session.query(QQdb).filter_by(topID=top_id).all()
+            top_all_datas = db_session.query(QQdb).filter_by(topID=top_id)
 
         else:
             top_all_datas = db_session.query(QQdb).filter_by(topID=top_id).order_by(QQdb.id.desc()).slice(0, int(num))
