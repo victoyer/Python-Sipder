@@ -40,12 +40,54 @@ class GifSpider(Spider):
         item = GifItemInfo()
         DataList = json.loads(response.text)["data"]["list"]
         for ch in DataList:
-            item["url"] = ch["url"]
-            item["sid"] = ch["sid"]
-            item["size"] = ch["size"]
-            item["width"] = ch["width"]
-            item["title"] = ch["title"]
-            item["height"] = ch["height"]
-            item["subText"] = ch["subText"]
+            item["url"] = self.get_url(ch)
+            item["sid"] = self.get_sid(ch)
+            item["size"] = self.get_size(ch)
+            item["width"] = self.get_width(ch)
+            item["title"] = self.get_title(ch)
+            item["height"] = self.get_height(ch)
+            item["subText"] = self.get_subText(ch)
 
             yield item
+
+    def get_width(self, ch):
+        try:
+            return ch["width"]
+        except KeyError:
+            return "NULL"
+
+    def get_url(self, ch):
+        try:
+            return ch["url"]
+        except KeyError:
+            return "NULL"
+
+    def get_sid(self, ch):
+        try:
+            return ch["sid"]
+        except KeyError:
+            return "NULL"
+
+    def get_size(self, ch):
+        try:
+            return ch["size"]
+        except KeyError:
+            return "NULL"
+
+    def get_title(self, ch):
+        try:
+            return ch["title"]
+        except KeyError:
+            return "NULL"
+
+    def get_height(self, ch):
+        try:
+            return ch["height"]
+        except KeyError:
+            return "NULL"
+
+    def get_subText(self, ch):
+        try:
+            return ch["subText"]
+        except KeyError:
+            return "NULL"
