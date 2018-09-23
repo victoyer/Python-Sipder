@@ -34,9 +34,9 @@ class GifPipeline(object):
 
     def close_spider(self, spider):
         while True:
-            item = eval(self.redisClient.srandmember('img_data').decode('utf-8') if self.redisClient.srandmember(
-                'img_data') else '0')
-            # item = eval(self.redisClient.spop('img_data').decode('utf-8') if self.redisClient.spop('img_data') else '0')
+            # item = eval(self.redisClient.srandmember('img_data').decode('utf-8') if self.redisClient.srandmember(
+            #     'img_data') else '0')
+            item = eval(self.redisClient.spop('img_data').decode('utf-8') if self.redisClient.spop('img_data') else '0')
             # 判断跳出
             if item == "0":
                 break
