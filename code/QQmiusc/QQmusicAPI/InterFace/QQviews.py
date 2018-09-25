@@ -30,7 +30,14 @@ def func_Serialization(datas):
                 'top_id': ch.topID,
                 'song_id': ch.songid,
                 'songname': ch.songname,
-                'songorig': ch.songorig
+                'songorig': ch.songorig,
+                'singerid': ch.singerid,
+                'singermid': ch.singermid,
+                'singername': ch.singername,
+                'ListName': ch.ListName,
+                'ListImgs': ch.ListImgs,
+                'SongTime': ch.SongTime,
+                'songmid': ch.songmid
             }
 
             data.append(dict_data)
@@ -60,3 +67,14 @@ def data(top_id, num):
         return func_Serialization(top_all_datas)
     else:
         return jsonify({'code': 700, 'msg': '请检查传入参数是否正确'})
+
+
+# 这个是demo，建立一个songType表来读表操作
+@dataAPI.route('/', methods=['GET'])
+def type():
+    types = [
+            {"code": 4, "id": 10100108, "name": "流行音乐"},
+            {"code": 54, "id": 10100110, "name": "明日之子"}
+        ]
+
+    return jsonify({"code": 200, "data": types})
