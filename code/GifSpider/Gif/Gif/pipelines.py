@@ -33,29 +33,54 @@ class GifPipeline(object):
         return item
 
     def close_spider(self, spider):
-        while True:
-            # item = eval(self.redisClient.srandmember('img_data').decode('utf-8') if self.redisClient.srandmember(
-            #     'img_data') else '0')
-            item = eval(self.redisClient.spop('img_data').decode('utf-8') if self.redisClient.spop('img_data') else '0')
-            # 判断跳出
-            if item == "0":
-                break
+        # while True:
+        #     # item = eval(self.redisClient.SMEMBERS('img_data').decode('utf-8') if self.redisClient.SMEMBERS('img_data') else '0')
+        #     item = eval(self.redisClient.spop('img_data').decode('utf-8') if self.redisClient.spop('img_data') else '0')
+        #     # 判断跳出
+        #     if item == "0":
+        #         break
+        #     cur = self.mysqlClient.cursor()
+        #     sql = "insert into img_data (url, sid, size, width, title, height, subText)values(%s,%s,%s,%s,%s,%s,%s)"
+        #     params = [
+        #         item["url"],
+        #         item["sid"],
+        #         item["size"],
+        #         item["width"],
+        #         item["title"],
+        #         item["height"],
+        #         item["subText"],
+        #     ]
+        #     try:
+        #         cur.execute(sql, params)
+        #         self.mysqlClient.commit()
+        #         cur.close()
+        #         print("插入{data}成功".format(data=item))
+        #     except Exception as e:
+        #         self.mysqlClient.rollback()
+        #         print(e)
+        # 取出Redis数据库中的全部数据 smembers
+        item = self.redisClient.smembers('items') if self.redisClient.smembers('items') else '0'
+        for ch in item:
             cur = self.mysqlClient.cursor()
-            sql = "insert into img_data (url, sid, size, width, title, height, subText)values(%s,%s,%s,%s,%s,%s,%s)"
-            params = [
-                item["url"],
-                item["sid"],
-                item["size"],
-                item["width"],
-                item["title"],
-                item["height"],
-                item["subText"],
+            # sql = "insert into SongInfo (singerid, singermid, singername, songid, songmid, songname, songorig, topID) values (%s,%s,%s,%s,%s,%s,%s,%s)"
+            sql = "insert into SongInfo (singerid, singermid, singername, songid, songmid, songname, songorig, topID)values(%s,%s,%s,%s,%s,%s,%s,%s)"
+            # 处理数据格式
+            item = eval(ch.decode("utf-8"))
+            parms = [
+                str(item["singerid"]),
+                str(item["singermid"]),
+                str(item["singername"]),
+                str(item["songid"]),
+                str(item["songmid"]),
+                str(item["songname"]),
+                str(item["songorig"]),
+                str(item["topID"]),
             ]
             try:
-                cur.execute(sql, params)
+                cur.execute(sql, parms)
                 self.mysqlClient.commit()
                 cur.close()
-                print("插入{data}成功".format(data=item))
+                print("插入数据{data}成功".format(data=parms))
             except Exception as e:
                 self.mysqlClient.rollback()
                 print(e)

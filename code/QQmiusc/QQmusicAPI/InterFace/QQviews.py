@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify
 from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy.orm import create_session
 from sqlalchemy.ext.declarative import declarative_base
-
+from sqlalchemy.sql.expression import func
 from utils.BD_con import DB_URL
 
 # 创建蓝图
@@ -34,9 +34,9 @@ def func_Serialization(datas):
                 'singerid': ch.singerid,
                 'singermid': ch.singermid,
                 'singername': ch.singername,
-                'ListName': ch.ListName,
-                'ListImgs': ch.ListImgs,
-                'SongTime': ch.SongTime,
+                'listname': ch.ListName,
+                'listimgs': ch.ListImgs,
+                'songtime': ch.SongTime,
                 'songmid': ch.songmid
             }
 
@@ -60,21 +60,22 @@ def data(top_id, num):
         top_all_datas = []
         if num == '0':
             top_all_datas = db_session.query(QQdb).filter_by(topID=top_id)
-
         else:
-            top_all_datas = db_session.query(QQdb).filter_by(topID=top_id).order_by(QQdb.id.desc()).slice(0, int(num))
-
+            # 从后到前获取指定数量数据
+            # top_all_datas = db_session.query(QQdb).filter_by(topID=top_id).order_by(QQdb.id.desc()).slice(0, int(num))
+            # 随机获取指定数量数据
+            top_all_datas = db_session.query(QQdb).filter_by(topID=top_id).order_by(func.rand()).limit(int(num))
         return func_Serialization(top_all_datas)
     else:
         return jsonify({'code': 700, 'msg': '请检查传入参数是否正确'})
 
 
-# 这个是demo，建立一个songType表来读表操作
+# 这个是demo，后面会建立一个songType表来读表操作
 @dataAPI.route('/', methods=['GET'])
 def type():
     types = [
-            {"code": 4, "id": 10100108, "name": "流行音乐"},
-            {"code": 54, "id": 10100110, "name": "明日之子"}
-        ]
+        {"code": 4, "id": 10100113, "name": "流行音乐"},
+        {"code": 54, "id": 10100117, "name": "明日之子"}
+    ]
 
     return jsonify({"code": 200, "data": types})
